@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-docker-go
+  namespace: hello-docker-go
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - image: docker.io/library/hello-docker-go:v3
+          name: backend
+          ports:
+            - containerPort: 1234
+              name: backend-port
+          env:
+            - name: DEFAULT_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: DEFAULT_NAME
+                  name: hello-docker-go-config
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "25Mi"
+            limits:
+              cpu: "500m"
+              memory: "50Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 1234
+            initialDelaySeconds: 5
+            periodSeconds: 5

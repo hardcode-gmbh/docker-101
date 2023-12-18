@@ -1,0 +1,64 @@
+services:
+  #caddy:
+  #  image: caddy:alpine
+  #  restart: unless-stopped
+  #  ports:
+  #    - 80:80
+  #    - 443:443
+  #    - 443:443/udp
+  #  volumes:
+  #    - ./Caddyfile:/etc/caddy/Caddyfile
+  #    - caddy_data:/data
+  mattermost:
+    image: mattermost/mattermost-team-edition
+    restart: unless-stopped
+    ports:
+      - 8001:8000
+    volumes:
+      - mattermost_config:/mattermost/config:rw
+      - mattermost_data:/mattermost/data:rw
+      - mattermost_logs:/mattermost/logs:rw
+      - mattermost_plugins:/mattermost/plugins:rw
+      - mattermost_client_plugins:/mattermost/client/plugins:rw
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - MM_USERNAME=mattermost
+      - MM_PASSWORD=
+      - MM_DBNAME=mattermost
+  woodpecker-server:
+    image: woodpeckerci/woodpecker-server:latest
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    volumes:
+      - woodpecker-server-data:/var/lib/woodpecker/
+    environment:
+      - WOODPECKER_ADMIN=cinemast
+      - WOODPECKER_OPEN=true
+      - WOODPECKER_HOST=${SCHEME}://ci.${DOMAIN}
+      - WOODPECKER_GITEA=true
+      - WOODPECKER_GITEA_URL=${SCHEME}://git.${DOMAIN}
+      - WOODPECKER_GITEA_CLIENT=${WOODPECKER_GITEA_CLIENT}
+      - WOODPECKER_GITEA_SECRET=${WOODPECKER_GITEA_SECRET}
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
+
+  woodpecker-agent:
+    image: woodpeckerci/woodpecker-agent:latest
+    command: agent
+    restart: always
+    depends_on:
+      - woodpecker-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WOODPECKER_SERVER=woodpecker-server:9000
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
+
+volumes:
+  woodpecker-server-data:
+  mattermost_config:
+  mattermost_data:
+  mattermost_logs:
+  mattermost_plugins:
+  mattermost_client_plugins:
+  caddy_data:

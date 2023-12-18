@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-docker-go-config
+  namespace: hello-docker-go
+data:
+  DEFAULT_NAME: Peter PROD

@@ -1,0 +1,14 @@
+nameSuffix: -test
+resources:
+  - configmap.yml
+  - ../../base
+commonLabels:
+  env: test
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: test.hello-docker-go.local
+    target:
+      kind: Ingress
+      name: hello-docker-go-ingress
