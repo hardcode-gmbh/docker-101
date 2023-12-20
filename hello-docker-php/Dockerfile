@@ -1,9 +1,9 @@
 ARG ALPINE_VERSION=3.18
-FROM alpine:${ALPINE_VERSION}
+FROM alpine:${ALPINE_VERSION} as builder
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-# Install packages and remove default server definition
+
 RUN apk add --no-cache \
   curl \
   nginx \
@@ -24,7 +24,31 @@ RUN apk add --no-cache \
   php82-tokenizer \
   php82-xml \
   php82-xmlreader \
-  php82-xmlwriter \
+  php82-xmlwriter
+
+RUN ln -s /usr/bin/php82 /usr/bin/php
+
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+COPY src/ /app
+
+RUN composer install \
+    --ignore-platform-reqs \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --prefer-dist
+
+
+FROM alpine:${ALPINE_VERSION}
+
+WORKDIR /var/www/html
+
+RUN apk add --no-cache \
+  curl \
+  nginx \
+  php82 \
+  php82-fpm \
   supervisor
 
 COPY config/nginx.conf /etc/nginx/nginx.conf
@@ -35,20 +59,10 @@ COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chown -R nobody.nobody /var/www/html /run /var/lib/nginx /var/log/nginx
 RUN ln -s /usr/bin/php82 /usr/bin/php
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 USER nobody
 
-
-COPY --chown=nobody src/ /var/www/html/
-
-RUN composer install \
-    --ignore-platform-reqs \
-    --no-interaction \
-    --no-plugins \
-    --no-scripts \
-    --prefer-dist
-
+COPY --from=builder /app /var/www/html/
 
 EXPOSE 8080
 

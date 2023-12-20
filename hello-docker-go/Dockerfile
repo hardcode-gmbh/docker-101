@@ -15,13 +15,12 @@ RUN go build -v  ./...
 
 
 
-FROM alpine:latest
+FROM alpine:3.19
 
 # Install runtime dependencies
 RUN apk add --no-cache fortune
 
-#RUN adduser user
-#USER user
+USER nobody
 
 # Document env + ports
 ENV DEFAULT_NAME=Peter

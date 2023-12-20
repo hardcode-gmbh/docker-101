@@ -5,7 +5,7 @@ paginate: true
 class:
   #- invert
   
-footer: Docker 101 | Peter Spiess-Knafl
+footer: Docker 101 | Peter Spiess-Knafl | hardcode GmbH
 ---
 
 ![width:500px](docker.png)
@@ -16,7 +16,7 @@ footer: Docker 101 | Peter Spiess-Knafl
 
 # Agenda
 
-- Discuss your experience (with Docker) so far
+- About you & me
 - What is Docker
 - Why use Docker
 - Writing Dockerfiles
@@ -29,10 +29,45 @@ footer: Docker 101 | Peter Spiess-Knafl
 
 ---
 
+# About you
+
+- What is your job?
+- In which programming language are
+  - you most comfortable in?
+  - not comfortable at all?
+- Which project are you proud of?
+  - What is {clean,ugly} code for you?
+  - What are your expectations of today?
+- What technical knowledge would you like to share?
+- What is your experience with Docker so far?
+- What is your goal for today's workshop?
+- What is puzzling you about Docker?
+
+---
+
+# About me
+
+- `$> whoami`: DI Spiess-Knafl Peter
+- Former Software Architect @ [bitmovin](https://bitmovin.com) and [skiline](https://www.skiline.cc/home)
+- Former Debian Maintainer (2014 - 2018)
+- Founder of 
+  - technikrabe OG (2016 - 2019)
+  - Spiess-Knafl Peter IT Solutions (since 2019) - [spiessknafl.at/peter](https://spiessknafl.at/peter)
+  - hardcode GmbH (since 2023) - [hardcode.at](https://hardcode.at)
+  - [nobloat.org](https://nobloat.org)
+- GitHub [cinemast](https://github.com/cinemast)
+  - [libjson-rpc-cpp](https://github.com/cinemast/libjson-rpc-cpp)
+  - [json-rpc-cxx](https://github.com/jsonrpcx/json-rpc-cxx)
+
+---
+
 # What is Docker?
 
 - A toolbox (UI) for managing containers ![width:150px](docker.png)
-  - Build, Share and Run
+  - Build - creating OCI compliant Container images
+  - Distribute - push images to registries
+  - Deploy - pull images from registries
+  - Run - create containers from images
 - specifically [LXC (Linux Containers)](https://en.wikipedia.org/wiki/LXC) 
 
 ![width:350px](interfaces.png)
@@ -41,7 +76,7 @@ footer: Docker 101 | Peter Spiess-Knafl
 
 # Why Docker?
 
-- Infrastructure as Code
+- [Infrastructure as Code](https://en.wikipedia.org/wiki/Infrastructure_as_code)
 - Immutability and reproducibility
 - Simple local development setups
 - When there is no other easy mechanism to install/deploy software
@@ -206,6 +241,7 @@ footer: Docker 101 | Peter Spiess-Knafl
 - Debugging:
   - `docker exec -it <container-id> /bin/sh`
   - `docker logs -f <container-id>`
+- Cleanup: `docker system prune`
 
 ---
 
@@ -284,18 +320,6 @@ footer: Docker 101 | Peter Spiess-Knafl
 
 ---
 
-# Conclusion and Recap
-
-- What is a Container and how does it differ from VMs?
-- What is a docker image and how can I build my own?
-- What is a registry?
-- How can I create containers?
-- How can Dockerfiles be optimized and why are layers important?
-- Where should persistent date be kept?
-- What useful tools are there for managing docker containers?
-
----
-
 # Deploying PHP applications with docker
 
 - Multiple scenarios possible
@@ -309,3 +333,32 @@ footer: Docker 101 | Peter Spiess-Knafl
     - suitable for "micro service" setups
     - nginx only runs once for all services
 - Using Docker container as local environment for db + app
+
+---
+
+# Deploying Node applications with docker
+
+- Depends on your setup
+- Frontend projects -> try to export as static sites and deploy into `nginx` or `s3` with cache
+- Backend projects
+  - Make sure you use multi-stage builds
+  - Especially with typescript
+  - Choose between `node`, `deno` and `bun`
+  - [pm2](https://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/) - 1 process per container rule, most of the time `pm2` can be replaced by native docker images without it.
+- Using Docker container as local environment for db + app
+
+---
+
+# Conclusion and Recap
+
+- What is a Container and how does it differ from VMs?
+- What is a docker image and how can I build my own?
+- What is a registry?
+- How can I create containers?
+- How can Dockerfiles be optimized and why are layers important?
+- Where should persistent data be kept?
+- What useful tools are there for managing docker containers?
+
+---
+
+# Thank you!
