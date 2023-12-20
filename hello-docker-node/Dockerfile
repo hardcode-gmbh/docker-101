@@ -20,4 +20,4 @@ COPY --chown=nobody:nobody --from=builder /usr/src/app/index.js /app
 
 USER nobody
 
-CMD ["node", "/index.js"]
+CMD ["node", "/app/index.js"]
