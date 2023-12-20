@@ -41,8 +41,8 @@ RUN composer install \
 
 
 FROM alpine:${ALPINE_VERSION}
-
 WORKDIR /var/www/html
+
 
 RUN apk add --no-cache \
   curl \

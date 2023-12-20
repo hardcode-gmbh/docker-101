@@ -68,7 +68,7 @@ footer: Docker 101 | Peter Spiess-Knafl | hardcode GmbH
   - Distribute - push images to registries
   - Deploy - pull images from registries
   - Run - create containers from images
-- specifically [LXC (Linux Containers)](https://en.wikipedia.org/wiki/LXC) 
+- specifically [CGroups and Kernel Namespaces](https://en.wikipedia.org/wiki/Cgroups) 
 
 ![width:350px](interfaces.png)
 
@@ -88,8 +88,7 @@ footer: Docker 101 | Peter Spiess-Knafl | hardcode GmbH
 
 # What is a Container?
 
-- LXC relies on Linux Kernel [cgroups](https://en.wikipedia.org/wiki/Cgroups)
-- CGroups allows applications to run in **isolation** of each other, regarding syscalls.
+- CGroups/Namespaces allows applications to run in **isolation** of each other, regarding syscalls.
   - Processes (PIDs)
   - Network (Ports)
   - Filesystem (Mounts)
@@ -155,7 +154,12 @@ footer: Docker 101 | Peter Spiess-Knafl | hardcode GmbH
 
 ---
 # Building Images
-`docker build -t ghcr.io/my-org/my-service:3.8 .`
+`docker build -t ghcr.io/my-org/my-service:3.8-alpine .`
+
+- `ghcr.io` - name/url of the registry to be pushed to, defaults to `hub.docker.io`
+- `my-org` - project name
+- `my-service` - image name
+- `3.8-alpine` - image tag (version and variant), defaults to `latest`
 
 ---
 # Docker Image
@@ -233,7 +237,7 @@ footer: Docker 101 | Peter Spiess-Knafl | hardcode GmbH
 
 - Remembering and executing `docker run` with lots of parameters is cumbersome
 - `docker compose` to the rescue, perfect for setting up local dev environments
-  - orchestrate multiple containers in a `compose.yml` file
+  - Orchestrate multiple containers in a `compose.yml` file
   - Manage in one place
     - Containers, Environment variables, Port Mappings
     - Networks
@@ -267,11 +271,11 @@ footer: Docker 101 | Peter Spiess-Knafl | hardcode GmbH
 
 # Tools
 
-- [Podman](https://podman.io/) - An alternative OCI compliant Docker alternative
+- [Podman](https://podman.io/) - Alternative OCI compliant Docker alternative
 - [dive](https://github.com/wagoodman/dive) - Inspect docker images interactively
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) - Developer UI
 - [Portainer](https://www.portainer.io/) - Web interface for docker daemons
-- [quay.io](https://quay.io) - Registry alternative to docker hub
+- [quay.io](https://quay.io) - Registry alternative to Docker Hub
 - [netshoot](https://github.com/nicolaka/netshoot) - Network debugging tools in one image
 
 ---
@@ -282,7 +286,7 @@ footer: Docker 101 | Peter Spiess-Knafl | hardcode GmbH
 - Containers are defined in `compose.yml` or `docker-compose.yml`
 - Very handy for local dev environments
   - 1 container that runs your PHP Code
-  - 1 container that runs a mysql database locally
+  - 1 container that runs a MySQL database locally
 - Manage containers, volumes, networks, ports, envs out of one file
 - `docker compose up <service>`, `docker compose down`, `docker compose logs -f`
 - `docker compose ps`, `docker compose pull`, `docker compose restart`
