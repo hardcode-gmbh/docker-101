@@ -48,6 +48,7 @@ RUN apk add --no-cache \
   curl \
   nginx \
   php82 \
+  php82-mysqli \
   php82-fpm \
   supervisor
 
